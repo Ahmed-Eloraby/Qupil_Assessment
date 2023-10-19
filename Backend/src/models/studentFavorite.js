@@ -6,15 +6,20 @@ const studentFavoriteSchema = new mongoose.Schema({
     ref: "Student",
   },
   subject: String,
-  favoriteTutors: [
-    {
-      tutor: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Tutor",
+  grade: Number,
+  favoriteTutors: {
+    type: [
+      {
+        tutor: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Tutor",
+        },
+        name: String,
+        score: Number,
       },
-      score: Number,
-    },
-  ],
+    ],
+    default: [],
+  },
 
   timeCreated: {
     type: Date,

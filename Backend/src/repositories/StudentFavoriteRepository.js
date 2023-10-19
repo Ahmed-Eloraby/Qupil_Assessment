@@ -1,12 +1,18 @@
 const mongoose = require("mongoose");
-const StudentFavorite = require("./models/studentFavoriteSchema"); // Import your StudentFavorite model
+const StudentFavorite = require("../models/studentFavorite"); // Import your StudentFavorite model
 
 // Function to create a new student favorite
-async function createStudentFavorite(studentId, subject, favoriteTutors) {
+async function createStudentFavorite(
+  studentId,
+  subject,
+  grade,
+  favoriteTutors
+) {
   try {
     const studentFavorite = new StudentFavorite({
       student: studentId,
       subject,
+      grade,
       favoriteTutors,
     });
     return await studentFavorite.save();

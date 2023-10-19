@@ -10,7 +10,7 @@ const client = new TextServiceClient({
 });
 
 const consultAI = async (prompt) => {
-  const sentence = `Given a sentence about timing of multiple sessions, suggest a suitable day for each session , time in 24h format, length of the session in minutes multiple of 30 , subject and grade. return it as a List of JSON objects like: [{ "day": "Sunday", "time": "XX:XX", "length": XX, "subject": "XXXX","grade": X}]. Each session starts at HH:00 or HH:30 and only lasts for 30 min. Make sure that all session do not clash with each other. if any data is missing, assign it with empty string if text or 0 if number. Sentence: ${prompt}`;
+  const sentence = `Given a sentence about timing of multiple sessions, determine subject and grade of the session, suggest a suitable day for each session, hour and minute  , length of the session in minutes as a multiple of 30. return it as a JSON object like: { "slots": [ "day": "Sunday", "hour": XX, "minute":xx // 30 or 0, "length": XX], "subject": "XXXX","grade": X} where slots can have more than one entry.Make sure that all session do not clash with each other. if any data is missing, assign it with empty string if text or 0 if number. Sentence: ${prompt}`;
   const result = await client.generateText({
     model: MODEL_NAME,
     prompt: {

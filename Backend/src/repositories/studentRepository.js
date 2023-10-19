@@ -1,4 +1,5 @@
-const Student = require("./models/student");
+const Student = require("../models/student");
+const StudentFavorite = require("../repositories/StudentFavoriteRepository");
 
 async function createStudent(username, email, password, gender) {
   const newStudent = new Student({

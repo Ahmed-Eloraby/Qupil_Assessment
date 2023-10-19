@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
 
-function GAISearchBox({ setSlots }) {
+function GAISearchBox({ setSlots, setSubject, setGrade }) {
   const [content, setContent] = useState("");
   const [response, setResponse] = useState("");
 
@@ -12,7 +12,11 @@ function GAISearchBox({ setSlots }) {
       .post("http://localhost:8080/api/v1/ai/", {
         prompt: content,
       })
-      .then((response) => setSlots(response.data))
+      .then((response) => {
+        setGrade(response.data.grade);
+        setSubject(response.data.subject);
+        setSlots(response.data.slots);
+      })
       .catch((err) => console.log(err));
     // Assuming the response is JSON data
   };
@@ -26,7 +30,7 @@ function GAISearchBox({ setSlots }) {
     <div>
       <h2>Search AI</h2>
       <TextField
-        label="Content"
+        label="Prompt"
         variant="outlined"
         multiline
         fullWidth
@@ -40,7 +44,7 @@ function GAISearchBox({ setSlots }) {
         onClick={handleSubmit}
         style={{ marginTop: "16px" }}
       >
-        Submit
+        GENERATE SEARCH OPTIONS
       </Button>
       {response && (
         <div>

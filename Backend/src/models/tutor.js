@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
 const DailyScheduleSchema = new mongoose.Schema({
+  day: {
+    type: String,
+  },
   startTime: {
     type: Number,
     required: true,
@@ -17,7 +20,7 @@ const DailyScheduleSchema = new mongoose.Schema({
     validate: {
       validator: function (value) {
         // Ensure attribute2 is greater than or equal to attribute1
-        return value >= this.attribute1;
+        return value >= this.startTime;
       },
       message: "endTime must be greater than or equal to startTime",
     },
@@ -34,29 +37,9 @@ const tutorSchema = new mongoose.Schema({
     type: String,
     enum: ["Male", "Female"],
   },
-
   schedule: {
-    Monday: {
-      type: { DailyScheduleSchema },
-    },
-    Tuesday: {
-      type: { DailyScheduleSchema },
-    },
-    Wednesday: {
-      type: { DailyScheduleSchema },
-    },
-    Thursday: {
-      type: { DailyScheduleSchema },
-    },
-    Friday: {
-      type: { DailyScheduleSchema },
-    },
-    Saturday: {
-      type: { DailyScheduleSchema },
-    },
-    Sunday: {
-      type: { DailyScheduleSchema },
-    },
+    type: [DailyScheduleSchema],
+    default: [],
   },
 });
 

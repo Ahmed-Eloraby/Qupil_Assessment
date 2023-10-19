@@ -1,12 +1,11 @@
 const TutorRepository = require("../repositories/tutorRepository");
-const TutorScheduleRepository = require("../repositories/tutorScheduleRepository");
 
 // Create a new tutor
 async function createTutor(req, res) {
   try {
     console.log("Creating User");
     const tutor = await TutorRepository.createTutor(req.body);
-    await TutorScheduleRepository.createTutorSchedule(tutor._id);
+    console.log(tutor);
     res.status(201).json(tutor);
   } catch (error) {
     res.status(500).json({ error: "Could not create tutor" });
@@ -55,30 +54,34 @@ async function findTutorById(req, res) {
   }
 }
 
-async function findTutorById(req, res) {
+async function addSlot(req, res) {
   try {
-    const tutor = await TutorRepository.findTutorById(req.params.id);
-    if (!tutor) {
+    console.log(req.body);
+    const newEntry = await TutorRepository.addScheduleEntry(
+      req.params.id,
+      req.body.day,
+      req.body.startTime,
+      req.body.endTime
+    );
+    if (!newEntry) {
       res.status(404).json({ message: "Tutor not found" });
     } else {
-      res.status(200).json(tutor);
+      res.status(200).json(newEntry);
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Could not retrieve tutor" });
   }
 }
 
-async function add(req, res) {
+async function searchForTutors(req, res) {
   try {
-    const tutor = await TutorRepository.findTutorById(req.params.id);
-    if (!tutor) {
-      res.status(404).json({ message: "Tutor not found" });
-    } else {
-      res.status(200).json(tutor);
-    }
+    const result = await TutorRepository.findTutor(req.body);
+    res.status(200).json(result);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Could not retrieve tutor" });
   }
 }
 
-module.exports = { findTutorById, createTutor };
+module.exports = { findTutorById, createTutor, addSlot, searchForTutors };

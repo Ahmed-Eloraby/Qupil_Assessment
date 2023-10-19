@@ -9,7 +9,14 @@ import Alert from "@mui/material/Alert";
 import TextField from "@mui/material/TextField";
 import { Box, FormControl, InputLabel } from "@mui/material";
 
-function SlotsSearchOptions({ slots, setSlots }) {
+function SlotsSearchOptions({
+  slots,
+  setSlots,
+  grade,
+  setGrade,
+  subject,
+  setSubject,
+}) {
   // const [slots, setSlots] = useState([
   //   {
   //     day: "Monday",
@@ -26,10 +33,9 @@ function SlotsSearchOptions({ slots, setSlots }) {
       ...slots,
       {
         day: "Monday",
-        time: "00:00",
-        subject: "",
-        grade: "",
-        sessionLength: "30",
+        hour: 0,
+        minute: 0,
+        length: "30",
       },
     ]);
   };
@@ -45,15 +51,9 @@ function SlotsSearchOptions({ slots, setSlots }) {
   const handleSlotChange = (e, index, field) => {
     const { name, value } = e.target;
     const updatedSlots = [...slots];
-    if (field == "hour") {
-      const newTime = value + updatedSlots[index]["time"].slice(2);
-      updatedSlots[index]["time"] = newTime;
-    } else if (field == "minute") {
-      const newTime = updatedSlots[index]["time"].slice(0, 3) + value;
-      updatedSlots[index]["time"] = newTime;
-    } else {
-      updatedSlots[index][field] = value;
-    }
+
+    updatedSlots[index][field] = value;
+
     // Check for uniqueness
     const isUnique = checkSlotUniqueness(updatedSlots);
     setIsUnique(isUnique);
@@ -64,7 +64,7 @@ function SlotsSearchOptions({ slots, setSlots }) {
   const checkSlotUniqueness = (slots) => {
     const slotSet = new Set();
     for (const slot of slots) {
-      const slotKey = `${slot.day}-${slot.time}-${slot.subject}-${slot.grade}`;
+      const slotKey = `${slot.day}-${slot.hour}-${slot.minute}`;
       if (slotSet.has(slotKey)) {
         return false; // Not unique
       }
@@ -77,6 +77,24 @@ function SlotsSearchOptions({ slots, setSlots }) {
     <Container>
       <Box sx={{ padding: 3, borderRadius: 2, textAlign: "center" }}>
         <h2>Search Options</h2>
+        <Box>
+          <TextField
+            placeholder="Subject"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            sx={{ marginBottom: 2 }}
+            required
+          />
+          <TextField
+            placeholder="Grade"
+            value={grade}
+            onChange={(e) =>
+              setGrade(Number(e.target.value.replace(/[^0-9]/g, "")))
+            }
+            sx={{ marginBottom: 2 }}
+            required
+          />
+        </Box>
         {slots.map((slot, index) => (
           <div key={index}>
             <FormControl sx={{ minWidth: 120 }}>
@@ -100,12 +118,12 @@ function SlotsSearchOptions({ slots, setSlots }) {
               <InputLabel>hour</InputLabel>
 
               <Select
-                value={slot.time.split(":")[0]} // Extract hours from time string
+                value={slot.hour}
                 onChange={(e) => handleSlotChange(e, index, "hour")}
                 sx={{ marginBottom: 2, marginX: 0.5 }}
               >
                 {[...Array(24)].map((_, i) => (
-                  <MenuItem key={i} value={i.toString().padStart(2, "0")}>
+                  <MenuItem key={i} value={i}>
                     {i.toString().padStart(2, "0")}
                   </MenuItem>
                 ))}
@@ -115,44 +133,27 @@ function SlotsSearchOptions({ slots, setSlots }) {
             <FormControl sx={{ minWidth: 120 }}>
               <InputLabel>Minute</InputLabel>
               <Select
-                value={slot.time.split(":")[1]} // Extract minutes from time string
+                value={slot.minute}
                 onChange={(e) => handleSlotChange(e, index, "minute")}
                 sx={{ marginBottom: 2 }}
               >
-                <MenuItem value="00">00</MenuItem>
-                <MenuItem value="30">30</MenuItem>
-              </Select>{" "}
+                <MenuItem value={0}>00</MenuItem>
+                <MenuItem value={30}>30</MenuItem>
+              </Select>
             </FormControl>
-
-            <TextField
-              type="text"
-              placeholder="Subject"
-              value={slot.subject}
-              onChange={(e) => handleSlotChange(e, index, "subject")}
-              sx={{ marginBottom: 2 }}
-              required
-            />
-            <TextField
-              type="text"
-              placeholder="Grade"
-              value={slot.grade}
-              onChange={(e) => handleSlotChange(e, index, "grade")}
-              sx={{ marginBottom: 2 }}
-              required
-            />
             <FormControl sx={{ minWidth: 120 }}>
               <InputLabel>Length</InputLabel>
               <Select
-                value={slot.sessionLength}
-                onChange={(e) => handleSlotChange(e, index, "sessionLength")}
+                value={slot.length}
+                onChange={(e) => handleSlotChange(e, index, "length")}
                 sx={{ width: "80px" }}
                 label={"Length"}
                 required
               >
-                <MenuItem value="30">30</MenuItem>
-                <MenuItem value="60">60</MenuItem>
-                <MenuItem value="90">90</MenuItem>
-              </Select>{" "}
+                <MenuItem value={30}>30</MenuItem>
+                <MenuItem value={60}>60</MenuItem>
+                <MenuItem value={90}>90</MenuItem>
+              </Select>
             </FormControl>
 
             {slots.length > 1 && (
