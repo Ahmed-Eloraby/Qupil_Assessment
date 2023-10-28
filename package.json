@@ -1,0 +1,10 @@
+{
+  "name": "Qupil App",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"cd frontend && npm start\" \"cd backend && npm start\""
+  },
+  "devDependencies": {
+    "concurrently": "^6.5.1"
+  }
+}
