@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import { Box } from "@mui/material";
 
 function GAISearchBox({ setSlots, setSubject, setGrade }) {
   const [content, setContent] = useState("");
@@ -27,7 +28,7 @@ function GAISearchBox({ setSlots, setSubject, setGrade }) {
   };
 
   return (
-    <div>
+    <Box sx={{ m: 1 }}>
       <h2>Search AI</h2>
       <TextField
         label="Prompt"
@@ -52,7 +53,7 @@ function GAISearchBox({ setSlots, setSubject, setGrade }) {
           <pre>{JSON.stringify(response, null, 2)}</pre>
         </div>
       )}
-    </div>
+    </Box>
   );
 }
 

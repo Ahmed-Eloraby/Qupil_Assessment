@@ -78,6 +78,7 @@ function Home() {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
+        p: 1,
       }}
     >
       <Paper
@@ -85,6 +86,7 @@ function Home() {
           padding: 3,
           borderRadius: 2,
           textAlign: "center",
+          minWidth: "40vw",
         }}
       >
         <GAISearchBox

@@ -17,6 +17,18 @@ async function createStudent(req, res) {
   }
 }
 
+async function getAllFavorites(req, res) {
+  try {
+    // should be taken from user:
+    const studentID = "6531c08f0dab29b7726b4af6";
+    const favorites = await StudentFavRepository.getStudentFavorite(studentID);
+    res.status(200).json(favorites);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Could not Fetch Favorite" });
+  }
+}
+
 async function createFav(req, res) {
   try {
     console.log("Creating Fav");
@@ -37,4 +49,4 @@ async function createFav(req, res) {
   }
 }
 
-module.exports = { createStudent, createFav };
+module.exports = { createStudent, createFav, getAllFavorites };

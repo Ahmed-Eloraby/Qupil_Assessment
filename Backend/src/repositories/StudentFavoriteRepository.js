@@ -24,7 +24,10 @@ async function createStudentFavorite(
 // Function to retrieve a student favorite by student ID and subject
 async function getStudentFavorite(studentId) {
   try {
-    return await StudentFavorite.find({ student: studentId });
+    return await StudentFavorite.find({ student: studentId })
+      .select("subject grade favoriteTutors")
+      .sort({ timeCreated: -1 })
+      .exec();
   } catch (error) {
     throw error;
   }

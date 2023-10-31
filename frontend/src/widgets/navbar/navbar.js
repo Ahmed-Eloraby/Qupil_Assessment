@@ -68,10 +68,10 @@ export default function MenuAppBar() {
             <MenuItem
               onClick={() => {
                 handleCloseL();
-                navigate("/favourites");
+                navigate("/favorites");
               }}
             >
-              Favourites
+              Favorites
             </MenuItem>
             <MenuItem
               onClick={() => {

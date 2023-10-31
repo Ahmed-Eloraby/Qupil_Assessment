@@ -61,18 +61,32 @@ async function findTutor(data) {
     grade: gradeToFind,
   });
 
+  console.log(tutors);
+
   tutors.forEach((tutor) => {
+    console.log("__________________________");
+    console.log("__________________________");
+    console.log("Tutor: " + tutor.username);
     tutor.schedule.forEach((scheduleEntry) => {
       const { day, startTime, endTime } = scheduleEntry;
+      console.log(`${day} ${startTime} ${endTime}`);
       data.slots.forEach((slot) => {
+        const slotStartTime = Number(slot.hour) * 60 + Number(slot.minute);
+        const slotEndTime =
+          Number(slot.hour) * 60 + Number(slot.minute) + Number(slot.length);
+        console.log(`>>>>${slot.day} ${slotStartTime} -> ${slotEndTime}`);
+        console.log(
+          `${day === slot.day} ${startTime <= slotStartTime} ${
+            endTime >= slotEndTime
+          }`
+        );
         if (
           day === slot.day &&
-          startTime <= Number(slot.hour) * 60 + Number(slot.minute) &&
-          endTime >=
-            Number(slot.hour) * 60 + Number(slot.minute) + Number(slot.length)
+          startTime <= slotStartTime &&
+          endTime >= slotEndTime
         ) {
+          console.log("**************SUCCESS**************");
           const tutorId = tutor._id;
-          // Add or update the tutor's score
           if (tutorScores.has(tutorId)) {
             tutorScores.set(tutorId, tutorScores.get(tutorId) + 1);
           } else {
@@ -86,9 +100,10 @@ async function findTutor(data) {
   console.log(tutorScores);
 
   const result = [];
-  for (const [tutorId, score] of tutorScores) {
+  for (const [tutorId, count] of tutorScores) {
     const tutor = tutors.find((tutor) => tutor._id === tutorId);
     if (tutor) {
+      const score = count / data.slots.length;
       result.push({
         id: tutorId,
         username: tutor.username,
@@ -96,7 +111,7 @@ async function findTutor(data) {
       });
     }
   }
-
+  console.log({ tutors: result, grade: gradeToFind, subject: subjectToFind });
   return { tutors: result, grade: gradeToFind, subject: subjectToFind };
 }
 

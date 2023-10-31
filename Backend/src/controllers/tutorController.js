@@ -77,6 +77,7 @@ async function addSlot(req, res) {
 async function searchForTutors(req, res) {
   try {
     const result = await TutorRepository.findTutor(req.body);
+    console.log(result);
     res.status(200).json(result);
   } catch (error) {
     console.log(error);
