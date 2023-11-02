@@ -21,6 +21,14 @@ async function createTutor(data) {
 //   return Tutor.findOne({ username });
 // }
 
+// Get All Tutors
+async function findAllTutors() {
+  const tutors = await Tutor.find().maxTimeMS(20000);
+  console.log(tutors);
+  const tutorSentences = tutors.map((tutor) => tutorToSentence(tutor));
+  return tutorSentences;
+}
+
 async function findTutorById(id) {
   return Tutor.findById(id);
 }
@@ -115,4 +123,35 @@ async function findTutor(data) {
   return { tutors: result, grade: gradeToFind, subject: subjectToFind };
 }
 
-module.exports = { createTutor, findTutorById, addScheduleEntry, findTutor };
+// Function to convert a Tutor document to a sentence
+function tutorToSentence(tutor) {
+  const { _id, username, subjects, grade, gender, schedule } = tutor;
+
+  const genderSentence = gender === "Male" ? "He" : "She";
+
+  const scheduleInfo =
+    schedule.length > 0
+      ? `Availability: ${schedule
+          .map(
+            (day) =>
+              `${day.day}: ${Math.floor(day.startTime / 60)}:${Math.floor(
+                day.startTime % 60
+              )}-${Math.floor(day.endTime / 60)}:${Math.floor(
+                day.endTime % 60
+              )}}`
+          )
+          .join(", ")}`
+      : "No availability information available";
+
+  return `Tutor ID: ${_id}, ${username} is ${gender}. ${genderSentence} teaches ${subjects.join(
+    ", "
+  )} for grades ${grade.join(", ")}. ${scheduleInfo}`;
+}
+
+module.exports = {
+  createTutor,
+  findTutorById,
+  addScheduleEntry,
+  findTutor,
+  findAllTutors,
+};

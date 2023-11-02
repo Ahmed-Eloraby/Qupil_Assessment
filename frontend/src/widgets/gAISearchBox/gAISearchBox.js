@@ -10,7 +10,7 @@ function GAISearchBox({ setSlots, setSubject, setGrade }) {
 
   const handleSubmit = () => {
     axios
-      .post("http://localhost:8080/api/v1/ai/", {
+      .post("http://localhost:8080/api/v1/ai/gpt", {
         prompt: content,
       })
       .then((response) => {
